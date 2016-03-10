@@ -9,15 +9,29 @@ public class directory {
             for (File aFile : first) {
                 
                 if (aFile.isDirectory()) {
-                    System.out.println("d" + " " + aFile.getAbsolutePath());
+                    int c = countFiles (aFile);
+                    System.out.println(c + " " + "d" + " " + aFile.getAbsolutePath());
                     listd(aFile.getAbsolutePath(), level + 1);
                 }
                 
                 else {
-                    System.out.println("f" + " " + aFile.getAbsolutePath());
+                    System.out.println("0" + " " + "f" + " " + aFile.getAbsolutePath());
                 }
             }
         }
+    }
+    
+    public static int countFiles (File direct) {
+        int count = 0;
+        for (File file : direct.listFiles()) {
+            if (file.isDirectory()) {
+                count = count;
+            }
+            else {
+                count++;
+            }
+        }
+        return count;
     }
     
     public static void main(String[] args) {
