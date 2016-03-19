@@ -3,65 +3,65 @@
 //Created by Koishore Roy on 10/03/2016.
 //
 //
-//directory.java
+//Directory.java
 
 import java.io.File;
 import java.lang.String;
 
-public class directory {
+public class Directory {
     
     static String[] TYPES = new String[] {"jpg", "png", "gif", "mp4", "mp3", "exe", "psd", "html", "xml"};
     
-    public void listd (String dirPath) {
+    public void directorylisting (String dirPath) {
         File dir = new File (dirPath);
-        File[] first = dir.listFiles();
+        File[] initial = dir.listFiles();
         
-        if (first != null && first.length > 0) {
-            for (File aFile : first) {
+        if (initial != null && initial.length > 0) {
+            for (File filetocheck : initial) {
                 
-                if (aFile.isDirectory()) {
-                    int c1 = countFiles (aFile);
-                    int c2 = countFilesrec (aFile);
-                    System.out.println(c2 + " " + c1 + " " + "d" + " " + aFile.getAbsolutePath());
-                    listd (aFile.getAbsolutePath());
+                if (filetocheck.isDirectory()) {
+                    int filecounter = countFiles (filetocheck);
+                    int recursivefilecounter = countFilesrecursive (filetocheck);
+                    System.out.println(recursivefilecounter + " " + filecounter + " " + "d" + " " + filetocheck.getAbsolutePath());
+                    directorylisting (filetocheck.getAbsolutePath());
                 }
                 
                 else {
-                    int c1 = 0;
-                    int c2 = 0;
-                    System.out.println (c2 + " " + c1 + " " + "f" + " " + aFile.getAbsolutePath());
+                    int filecounter = 0;
+                    int recursivefilecounter = 0;
+                    System.out.println (recursivefilecounter + " " + filecounter + " " + "f" + " " + filetocheck.getAbsolutePath());
                 }
             }
         }
     }
 
-    public void extension (File cwd) {
-        for (String ext: TYPES) {
+    public void extension (File filename) {
+        for (String extensionname : TYPES) {
             int count = 0;
             long size = 0;
             
-            for (File file : cwd.listFiles()) {
+            for (File file : filename.listFiles()) {
                 if (file.isFile()) {
-                    if (file.toString().endsWith(ext)) {
+                    if (file.toString().endsWith(extensionname)) {
                         count++;
                         size = size + file.length();
                     }
                 }
                 
                 else {
-                    count += extrecurse (file, ext);
-                    size += extrecursesize (file, ext);
+                    count += numberoffiles (file, extensionname);
+                    size += sizeoffiles (file, extensionname);
                 }
             }
             
-            System.out.println (ext + " - " + count + " " + String.format("%,d", size));
+            System.out.println (extensionname + " - " + count + " " + String.format("%,d", size));
         }
     }
 
-    public int extrecurse (File director, String extension) {
+    public int numberoffiles (File address, String extension) {
         int count = 0;
         
-        for (File file: director.listFiles()) {
+        for (File file : address.listFiles()) {
             if (!file.isDirectory()) {
                 if (file.toString().endsWith(extension)) {
                     count++;
@@ -69,31 +69,31 @@ public class directory {
             }
             
             else {
-                count += extrecurse(file, extension);
+                count += numberoffiles(file, extension);
             }
         }
         return count;
     }
 
-    public int extrecursesize (File director, String extension) {
+    public int sizeoffiles (File address, String extension) {
         long size = 0;
         
-        for (File file : director.listFiles()) {
+        for (File file : address.listFiles()) {
             if (!file.isDirectory()) {
                 if (file.toString().endsWith(extension)) {
                     size += file.length();
                 }
             }
             else {
-                size += extrecursesize (file, extension);
+                size += sizeoffiles (file, extension);
             }
         }
         return (int) size;
     }
     
-    public static int countFiles (File direct) {
+    public static int countFiles (File listingdirectory) {
         int count = 0;
-        for (File file : direct.listFiles()) {
+        for (File file : listingdirectory.listFiles()) {
             if (!file.isDirectory()) {
                 count++;
             }
@@ -101,11 +101,11 @@ public class directory {
         return count;
     }
     
-    public static int countFilesrec (File direct) {
+    public static int countFilesrecursive (File listingdirectory) {
         int count = 0;
-        for (File file : direct.listFiles()) {
+        for (File file : listingdirectory.listFiles()) {
             if (file.isDirectory()) {
-                count += countFilesrec(file);
+                count += countFilesrecursive(file);
             }
             else
                 count++;
@@ -114,14 +114,14 @@ public class directory {
     }
     
     public static void main (String[] args) {
-        long start = System.currentTimeMillis();
-        directory prog = new directory();
+        long starttime = System.currentTimeMillis();
+        Directory program = new Directory();
         String list = System.getProperty("user.home") + File.separator + "Desktop";
-        File list1 = new File(list);
-        prog.listd(list);
-        prog.extension(list1);
-        long end = System.currentTimeMillis();
-        long time = end - start;
-        System.out.println ("Program executed in " + time + " milliseconds.");
+        File filelist = new File (list);
+        program.directorylisting (list);
+        program.extension (filelist);
+        long endtime = System.currentTimeMillis();
+        long time = endtime - starttime;
+        System.out.println ("Program executed in " + String.format("%,d", time) + " milliseconds.");
     }
 }
